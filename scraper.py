@@ -34,8 +34,7 @@ async def main():
             soup = BeautifulSoup(html, 'html.parser')
             
             items = soup.find_all('div', class_='css-l9drzq')
-            if not items:
-                break
+            if not items: break
             
             for item in items:
                 title = item.find('h4', class_='css-1sq4ur2').text.strip()
@@ -43,10 +42,12 @@ async def main():
                 date_publ = str(format_datetime(item.find('p', class_='css-1mwdrlh').text.strip().replace('Дніпро, Соборний - ', '')))
                 url = item.find('div', class_='css-u2ayx9').find('a', class_='css-qo0cxu').get('href')
                 url = (f'https://www.olx.ua/{url}')
+                description = 0
                 publications.append({
                     'title': title,
                     'price': price,
                     'date': date_publ,
+                    'description': description,
                     'url': url
                 })
                 print(f'page: {page}\npublications: {len(publications)}')
@@ -55,7 +56,5 @@ async def main():
         json.dump(publications, f, ensure_ascii=False, indent=4)
 
 if __name__ == '__main__':
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print('Bot stopped')
+    try: asyncio.run(main())
+    except KeyboardInterrupt: print('Bot stopped')
